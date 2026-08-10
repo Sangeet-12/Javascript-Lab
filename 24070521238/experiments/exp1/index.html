@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Experiment - JavaScript Demonstration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            max-width: 550px;
+            border-radius: 5px;
+        }
+
+        .user-info {
+            background-color: #e9ecef;
+            padding: 12px;
+            border-left: 4px solid #007bff;
+            margin: 15px 0;
+        }
+
+        button {
+            padding: 8px 12px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+    </style>
+
+    <!-- Internal JavaScript -->
+    <script>
+        // Console methods in Internal JS
+        console.log("Internal JS: Script loaded in head.");
+        console.info("Internal JS Info: Page title is '" + document.title + "'");
+
+        function internalJsDemo() {
+            console.log("Internal JS: Button clicked!");
+            alert("Hello from Internal JavaScript!");
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="card">
+        <h1>JavaScript Basics Lab</h1>
+
+        <!-- Dynamic Welcome Message -->
+        <h2 id="welcome-msg">Welcome!</h2>
+
+        <!-- User Information Section -->
+        <div class="user-info">
+            <h3>User Information</h3>
+            <p><strong>Name:</strong> Sangeet Harne</p>
+            <p><strong>Roll No:</strong> 24070521238</p>
+            <p><strong>Branch:</strong> Computer Science & Engineering</p>
+        </div>
+
+        <h3>Demonstrate JavaScript Execution Types</h3>
+
+        <!-- Inline JavaScript -->
+        <button onclick="console.log('Inline JS triggered'); alert('Hello from Inline JavaScript!');">
+            Inline JS
+        </button>
+
+        <!-- Internal JavaScript -->
+        <button onclick="internalJsDemo()">
+            Internal JS
+        </button>
+
+        <!-- External JavaScript -->
+        <button onclick="externalJsDemo()">
+            External JS
+        </button>
+    </div>
+
+    <!-- External JavaScript File -->
+    <script src="script.js"></script>
+</body>
+
+</html>

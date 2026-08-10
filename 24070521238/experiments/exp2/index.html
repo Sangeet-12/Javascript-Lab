@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Billing Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f4f4f4;
+    }
+    .box {
+      max-width: 550px;
+      padding: 20px;
+      background: #fff;
+      border: 1px solid #ccc;
+    }
+    .prn {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 15px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    input {
+      width: 90%;
+      padding: 5px;
+      box-sizing: border-box;
+    }
+    .btn {
+      padding: 6px 12px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+    .result {
+      margin-top: 15px;
+      padding: 12px;
+      background: #eee;
+      border: 1px solid #ddd;
+    }
+    ul {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h2>Interactive Billing Calculator</h2>
+    <div class="prn">PRN:24070521238</div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Item Name</th>
+          <th>Price (₹)</th>
+          <th>Qty</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="itemList">
+        <!-- Dynamic items will be added here -->
+      </tbody>
+    </table>
+
+    <div style="margin-bottom: 15px;">
+      <label>Tax Rate (%): </label>
+      <input type="number" id="taxRate" value="10" style="width: 70px;">
+    </div>
+
+    <button class="btn" onclick="addItem()">+ Add Item</button>
+    <button class="btn" onclick="calculateBill()">Calculate Total</button>
+
+    <div id="output" class="result" style="display: none;"></div>
+  </div>
+
+  <script>
+    // 1. Using 'var'
+    var currencySymbol = "₹";
+
+    // Function to add a new item row
+    function addItem(itemName = "", itemPrice = "", itemQty = 1) {
+      const itemList = document.getElementById('itemList');
+
+      // 2. Template Literals for row creation
+      const rowHTML = `
+        <tr>
+          <td><input type="text" class="item-name" value="${itemName}" placeholder="Item name"></td>
+          <td><input type="number" class="item-price" value="${itemPrice}" placeholder="0"></td>
+          <td><input type="number" class="item-qty" value="${itemQty}" placeholder="1"></td>
+          <td><button class="btn" onclick="this.parentElement.parentElement.remove()">Delete</button></td>
+        </tr>
+      `;
+      itemList.insertAdjacentHTML('beforeend', rowHTML);
+    }
+
+    // Default sample items
+    addItem("Notebook", 50, 2);
+    addItem("Pen", 10, 5);
+
+    function calculateBill() {
+      // 3. Using 'const'
+      const names = document.querySelectorAll('.item-name');
+      const prices = document.querySelectorAll('.item-price');
+      const qtys = document.querySelectorAll('.item-qty');
+      const taxInput = parseFloat(document.getElementById('taxRate').value) || 0;
+
+      // 4. Using 'let'
+      let subtotal = 0;
+      let billItems = [];
+
+      for (let i = 0; i < names.length; i++) {
+        const name = names[i].value || "Unnamed Item";
+        const price = parseFloat(prices[i].value) || 0;
+        const qty = parseInt(qtys[i].value) || 0;
+        const itemTotal = price * qty;
+
+        subtotal += itemTotal;
+
+        billItems.push({ name, price, qty, itemTotal });
+      }
+
+      let taxAmount = (subtotal * taxInput) / 100;
+      let grandTotal = subtotal + taxAmount;
+
+      let itemsListHTML = "";
+
+      // 5. Object Destructuring & Template Literals
+      for (const itemObj of billItems) {
+        const { name, qty, itemTotal } = itemObj;
+        itemsListHTML += `<li>${name} (x${qty}) - ${currencySymbol}${itemTotal.toFixed(2)}</li>`;
+      }
+
+      const receiptHTML = `
+        <strong>Bill Receipt</strong>
+        <ul>${itemsListHTML}</ul>
+        <p><strong>Subtotal:</strong> ${currencySymbol}${subtotal.toFixed(2)}</p>
+        <p><strong>Tax (${taxInput}%):</strong> ${currencySymbol}${taxAmount.toFixed(2)}</p>
+        <hr>
+        <strong>Total Amount: ${currencySymbol}${grandTotal.toFixed(2)}</strong>
+      `;
+
+      const outputDiv = document.getElementById('output');
+      outputDiv.innerHTML = receiptHTML;
+      outputDiv.style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>

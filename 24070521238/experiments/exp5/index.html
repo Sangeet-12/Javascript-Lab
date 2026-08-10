@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Total Calculator - Exp 5</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            max-width: 600px;
+        }
+        .prn {
+            font-size: 16px;
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 15px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        label {
+            display: inline-block;
+            width: 110px;
+        }
+        input {
+            padding: 5px;
+            width: 150px;
+        }
+        button {
+            padding: 6px 12px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .summary {
+            margin-top: 15px;
+            background: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Shopping Cart Calculator</h2>
+    <div class="prn">PRN:24070521238</div>
+
+    <div class="form-group">
+        <label>Item Name:</label>
+        <input type="text" id="itemName" placeholder="e.g. Notebook">
+    </div>
+    <div class="form-group">
+        <label>Price (₹):</label>
+        <input type="number" id="itemPrice" placeholder="e.g. 50">
+    </div>
+    <div class="form-group">
+        <label>Quantity:</label>
+        <input type="number" id="itemQty" placeholder="e.g. 2">
+    </div>
+    <button onclick="addItem()">Add to Cart</button>
+
+    <br><br>
+    <div class="form-group">
+        <label>Discount (%):</label>
+        <input type="number" id="discount" value="0" placeholder="e.g. 10" oninput="calculateTotal()">
+    </div>
+
+    <h3>Cart Items</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="cartTable">
+            <tr>
+                <td colspan="5" style="text-align:center;">Cart is empty</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="summary">
+        <p>Subtotal: ₹<span id="subtotal">0.00</span></p>
+        <p>Discount Amount: -₹<span id="discountAmount">0.00</span></p>
+        <h4>Grand Total: ₹<span id="grandTotal">0.00</span></h4>
+    </div>
+
+    <script>
+        // Array to store item objects
+        let cart = [];
+
+        // Object Constructor / Handler
+        function createItemObject(name, price, qty) {
+            return {
+                name: name,
+                price: parseFloat(price),
+                quantity: parseInt(qty),
+                getItemTotal: function() {
+                    return this.price * this.quantity;
+                }
+            };
+        }
+
+        // Add Item to Cart using Array.prototype.push
+        function addItem() {
+            let name = document.getElementById("itemName").value.trim();
+            let price = document.getElementById("itemPrice").value;
+            let qty = document.getElementById("itemQty").value;
+
+            if (name === "" || price <= 0 || qty <= 0) {
+                alert("Please enter valid item details.");
+                return;
+            }
+
+            // Create object and push to array
+            let itemObj = createItemObject(name, price, qty);
+            cart.push(itemObj);
+
+            // Clear inputs
+            document.getElementById("itemName").value = "";
+            document.getElementById("itemPrice").value = "";
+            document.getElementById("itemQty").value = "";
+
+            renderCart();
+        }
+
+        // Delete Item using Array.prototype.splice
+        function removeItem(index) {
+            cart.splice(index, 1);
+            renderCart();
+        }
+
+        // Render Cart using Array.prototype.forEach / Array.prototype.map
+        function renderCart() {
+            let tbody = document.getElementById("cartTable");
+            tbody.innerHTML = "";
+
+            if (cart.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Cart is empty</td></tr>';
+                calculateTotal();
+                return;
+            }
+
+            // Object handling and Array iteration
+            cart.forEach((item, index) => {
+                let row = `<tr>
+                    <td>${item.name}</td>
+                    <td>₹${item.price.toFixed(2)}</td>
+                    <td>${item.quantity}</td>
+                    <td>₹${item.getItemTotal().toFixed(2)}</td>
+                    <td><button onclick="removeItem(${index})">Remove</button></td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+
+            calculateTotal();
+        }
+
+        // Calculate Totals using Array.prototype.reduce
+        function calculateTotal() {
+            // Using Array reduce method to sum item totals
+            let subtotal = cart.reduce((sum, item) => sum + item.getItemTotal(), 0);
+
+            let discountInput = parseFloat(document.getElementById("discount").value) || 0;
+            if (discountInput < 0) discountInput = 0;
+            if (discountInput > 100) discountInput = 100;
+
+            let discountAmount = (subtotal * discountInput) / 100;
+            let grandTotal = subtotal - discountAmount;
+
+            document.getElementById("subtotal").innerText = subtotal.toFixed(2);
+            document.getElementById("discountAmount").innerText = discountAmount.toFixed(2);
+            document.getElementById("grandTotal").innerText = grandTotal.toFixed(2);
+        }
+    </script>
+</body>
+</html>

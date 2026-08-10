@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palindrome Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 450px;
+            background: #ffffff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        .prn {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 15px;
+        }
+        input[type="text"] {
+            width: 95%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            padding: 8px 15px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 15px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+        .tracker {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Palindrome Checker</h2>
+    <div class="prn">PRN: 24070521238</div>
+
+    <label for="strInput">Enter Text:</label><br><br>
+    <input type="text" id="strInput" placeholder="e.g., racecar or madam">
+    <button onclick="handleCheck()">Check</button>
+
+    <div id="result"></div>
+    <div id="tracker" class="tracker"></div>
+</div>
+
+<script>
+    // Global Scope Variable
+    let globalCounter = 0;
+
+    // Closure: Function returning inner function that retains outer scope variable
+    function createHistoryTracker() {
+        let checkCount = 0; // Outer variable preserved in closure
+        return function() {
+            checkCount++;
+            return "Total Checks: " + checkCount;
+        };
+    }
+    const trackCheck = createHistoryTracker();
+
+    // Function Type 1: Function Expression (Anonymous Function)
+    const cleanInput = function(text) {
+        // Function Scope variable
+        let cleaned = text.toLowerCase().replace(/[^a-z0-9]/g, '');
+        return cleaned;
+    };
+
+    // Function Type 2: Arrow Function
+    const isPalindrome = (str) => {
+        let reversedStr = str.split('').reverse().join('');
+        return str === reversedStr;
+    };
+
+    // Function Type 3: Function Declaration
+    function handleCheck() {
+        let inputElement = document.getElementById("strInput");
+        let resultDiv = document.getElementById("result");
+        let trackerDiv = document.getElementById("tracker");
+        let inputValue = inputElement.value;
+
+        // Try-Catch Block for Error Handling
+        try {
+            // Validation: Empty check
+            if (!inputValue.trim()) {
+                throw new Error("Please enter a string to check.");
+            }
+
+            let formattedText = cleanInput(inputValue);
+
+            if (formattedText.length === 0) {
+                throw new Error("Input must contain valid letters or numbers.");
+            }
+
+            // Check if string is a palindrome
+            let result = isPalindrome(formattedText);
+
+            if (result) {
+                resultDiv.className = "success";
+                resultDiv.innerHTML = `"${inputValue}" is a Palindrome!`;
+            } else {
+                resultDiv.className = "error";
+                resultDiv.innerHTML = `"${inputValue}" is NOT a Palindrome!`;
+            }
+
+            // Update closure counter
+            trackerDiv.innerText = trackCheck();
+
+        } catch (err) {
+            // Display catch error message
+            resultDiv.className = "error";
+            resultDiv.innerHTML = "Error: " + err.message;
+        }
+    }
+</script>
+
+</body>
+</html>
