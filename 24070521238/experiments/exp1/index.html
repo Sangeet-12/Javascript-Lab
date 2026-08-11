@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiment 1 - JS Basics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 550px;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+        }
+        h2 {
+            margin-top: 0;
+            color: #222;
+        }
+        .prn-text {
+            font-size: 16px;
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 15px;
+        }
+        .user-box {
+            background: #f0f4f8;
+            padding: 12px;
+            margin: 15px 0;
+            border-left: 4px solid #007bff;
+        }
+        .user-box p {
+            margin: 5px 0;
+        }
+        button {
+            padding: 8px 12px;
+            margin: 4px 4px 4px 0;
+            cursor: pointer;
+            border: 1px solid #999;
+            background: #e7e7e7;
+            border-radius: 3px;
+        }
+        button:hover {
+            background: #dcdcdc;
+        }
+    </style>
+
+    <!-- Internal JavaScript -->
+    <script>
+        function showInternalMessage() {
+            alert("Internal JS: Function executed from head script tag!");
+        }
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Lab Experiment 1</h2>
+        <div class="prn-text">PRN:24070521238</div>
+
+        <div id="welcome-section">
+            <h3 id="welcome-msg">Welcome Student</h3>
+        </div>
+
+        <div class="user-box" id="user-info">
+            <!-- Populated by External JS -->
+        </div>
+
+        <h3>JavaScript Demonstration</h3>
+        
+        <!-- Inline JavaScript -->
+        <button onclick="alert('Inline JS Executed!')">
+            Inline JS
+        </button>
+
+        <!-- Internal JavaScript -->
+        <button onclick="showInternalMessage()">
+            Internal JS
+        </button>
+
+        <!-- External JavaScript -->
+        <button onclick="showExternalDemo()">
+            External JS
+        </button>
+    </div>
+
+    <!-- External JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
